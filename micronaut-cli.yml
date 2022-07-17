@@ -1,6 +1,0 @@
-applicationType: default
-defaultPackage: org.brienze.crypto.data.digest
-testFramework: junit
-sourceLanguage: kotlin
-buildTool: maven
-features: [annotation-api, app-name, aws-v2-sdk, dynamodb, http-client, jms-sqs, junit, kotlin, kotlin-application, logback, maven, netty-server, readme, serialization-jackson, shade, yaml]
