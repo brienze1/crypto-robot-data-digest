@@ -9,7 +9,7 @@
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "lint": "eslint --fix --ext .ts .",
     "dev": "ts-node-dev -r tsconfig-paths/register src/main/application/server.ts --respawn --transpileOnly --ignore-watch node_modules --no-notify",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "start": "node dist/server.js"
   },
   "repository": {
