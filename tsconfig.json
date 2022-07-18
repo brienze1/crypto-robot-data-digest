@@ -12,7 +12,7 @@
     "outDir": "./dist",
     "typeRoots": [
       "./node_modules/@types",
-      "./src/@types"
+      "./src/main/application/types"
     ],
     "resolveJsonModule": true,
     "allowJs": true,
