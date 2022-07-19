@@ -21,8 +21,12 @@
         "import"
     ],
     "rules": {
+        "no-underscore-dangle": "off",
         "import/prefer-default-export": "off",
         "class-methods-use-this": "off",
+        "lines-between-class-members": "off",
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": ["error"],
         "no-undef": "off",
         "indent": [
             "error",

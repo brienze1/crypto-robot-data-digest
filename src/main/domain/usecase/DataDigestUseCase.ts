@@ -1,6 +1,14 @@
 class DataDigestUseCase {
     digest() {
-        console.log('test');
+        //TODO update data
+
+        //TODO get other data
+
+        //TODO evaluate if all data required exists
+
+        //TODO digest data
+
+        //TODO send event (BUY, SELL)
     }
 }
 
