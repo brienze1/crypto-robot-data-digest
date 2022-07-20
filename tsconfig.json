@@ -31,8 +31,7 @@
     }
   },
   "include": [
-    "src/**/*",
-    "resources/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules"
