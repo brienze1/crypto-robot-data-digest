@@ -133,7 +133,7 @@ Example of how the data should look like:
 ### Output
 
 Since this is an async application there is no output to be received, but events are generated accordingly to the data received, 
-the events should have an indication to BUY or SELL
+the events should have an indication to BUY or SELL.
 
 Example of how the line should look like:
 
@@ -187,22 +187,142 @@ Example of how the line should look like:
                 }
             }
           ]   
+        },
+        {
+          "interval": "FIFTEEN_MINUTES",
+          "timestamp": "20-07-2022 02:18:10",
+          "summary": "STRONG_BUY",
+          "analysis": [
+            {
+                "indicator": "SIMPLE_MOVING_AVERAGE",
+                "summary": "BUY",
+                "score": {
+                    "buy": 4,
+                    "sell": 2
+                }
+            },
+            {
+                "indicator": "EXPONENTIAL_MOVING_AVERAGE",
+                "summary": "NEUTRAL",
+                "score": {
+                    "buy": 3,
+                    "sell": 3
+                }
+            }
+          ]   
+        },
+        {
+          "interval": "THIRTY_MINUTES",
+          "timestamp": "20-07-2022 02:18:10",
+          "summary": "STRONG_BUY",
+          "analysis": [
+            {
+                "indicator": "SIMPLE_MOVING_AVERAGE",
+                "summary": "BUY",
+                "score": {
+                    "buy": 4,
+                    "sell": 2
+                }
+            },
+            {
+                "indicator": "EXPONENTIAL_MOVING_AVERAGE",
+                "summary": "NEUTRAL",
+                "score": {
+                    "buy": 3,
+                    "sell": 3
+                }
+            }
+          ]   
+        },
+        {
+          "interval": "ONE_HOUR",
+          "timestamp": "20-07-2022 02:18:10",
+          "summary": "STRONG_BUY",
+          "analysis": [
+            {
+                "indicator": "SIMPLE_MOVING_AVERAGE",
+                "summary": "BUY",
+                "score": {
+                    "buy": 4,
+                    "sell": 2
+                }
+            },
+            {
+                "indicator": "EXPONENTIAL_MOVING_AVERAGE",
+                "summary": "NEUTRAL",
+                "score": {
+                    "buy": 3,
+                    "sell": 3
+                }
+            }
+          ]   
+        },
+        {
+          "interval": "SIX_HOURS",
+          "timestamp": "20-07-2022 02:18:10",
+          "summary": "STRONG_BUY",
+          "analysis": [
+            {
+                "indicator": "SIMPLE_MOVING_AVERAGE",
+                "summary": "BUY",
+                "score": {
+                    "buy": 4,
+                    "sell": 2
+                }
+            },
+            {
+                "indicator": "EXPONENTIAL_MOVING_AVERAGE",
+                "summary": "NEUTRAL",
+                "score": {
+                    "buy": 3,
+                    "sell": 3
+                }
+            }
+          ]   
+        },
+        {
+          "interval": "ONE_DAY",
+          "timestamp": "20-07-2022 02:18:10",
+          "summary": "STRONG_BUY",
+          "analysis": [
+            {
+                "indicator": "SIMPLE_MOVING_AVERAGE",
+                "summary": "BUY",
+                "score": {
+                    "buy": 4,
+                    "sell": 2
+                }
+            },
+            {
+                "indicator": "EXPONENTIAL_MOVING_AVERAGE",
+                "summary": "NEUTRAL",
+                "score": {
+                    "buy": 3,
+                    "sell": 3
+                }
+            }
+          ]   
         }
     ]
 }
 ```
 
-WIP
+The most important field is the "summary" field, but the detailed indicators could also be used if necessary.
 
 ### Rules
 
-WIP
+Here are some rules that need to be implemented in this application.
 
-* Rule example
+* Data needs to be updated on the database
+* Data received should be checked to see if it's newer than the one saved
+* The app should gather all the data saved and generate an indication
+* If there is no data saved on the database, the summary should be generated using only the data received
+* The data should be sent via SNS topic event
 
 ### Built With
 
-WIP
+This application is build with Node.js Typescript, code is build using a Dockerfile every deployment into the main branch 
+in GitHub using GitHub actions.
 
 #### Dependencies
 
