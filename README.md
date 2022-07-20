@@ -394,6 +394,8 @@ To run the application locally, first a local infrastructure needs to be deploye
 This requires [docker](#prerequisites) to be installed. Localstack will deploy aws local integration and create the 
 topic used by this application to send the events.
 
+Obs: Make sure Docker is running before.
+
 - Start the required infrastructure via localstack using docker compose command:
     - Windows/macOS/Linux/WSL
       ```bash
