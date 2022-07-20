@@ -41,6 +41,10 @@
                 "ts": "never",
                 "tsx": "never"
             }
-        ]
+        ],
+        // temporary
+        "no-unused-vars": "off",
+        "no-empty-function": "off",
+        "no-useless-constructor": "off"
     }
 }

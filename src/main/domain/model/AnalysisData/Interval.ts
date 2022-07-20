@@ -13,5 +13,4 @@ export class Interval {
         private weight: number,
     ) {
     }
-
 }

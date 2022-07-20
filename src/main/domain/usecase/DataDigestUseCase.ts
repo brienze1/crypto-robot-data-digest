@@ -1,14 +1,14 @@
 class DataDigestUseCase {
     digest() {
-        //TODO update data
+        // TODO update data
 
-        //TODO get other data
+        // TODO get other data
 
-        //TODO evaluate if all data required exists
+        // TODO evaluate if all data required exists
 
-        //TODO digest data
+        // TODO digest data
 
-        //TODO send event (BUY, SELL)
+        // TODO send event (BUY, SELL)
     }
 }
 
