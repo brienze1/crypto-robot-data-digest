@@ -23,32 +23,173 @@
 
 ## About the Project
 
-The objective of this challenge is to implement an API that can return an analysis over a crypto asset
+The objective of this project is to implement an application that can digest analysis data and generate a BUY or SELL event.
 
 ### Input
 
-WIP
+The input should be received as an SNS message sent through an SQS subscription. This message will trigger the lambda handler to perform the service. 
+Data should come in intervals of analysis, each interval should have two types of analysis (initially, this could improve in the future) 
+simple moving average analysis (SMA) and exponential moving average analysis (EMA), each of them will have 6 periods of data analysed. 
+The analysis will have an indicator for the period evaluated this can range from a STRONG_SELL up to a STRONG_BUY indication.
 
-- example: Description of example
+The intervals will be received as:
+- ONE_MINUTE
+- FIVE_MINUTES
+- FIFTEEN_MINUTES
+- THIRTY_MINUTES
+- ONE_HOUR
+- SIX_HOURS
+- ONE_DAY
 
-Example of how the line should look like:
+Each interval will analyse the data according to these periods:
+- 5
+- 10
+- 20
+- 50
+- 100
+- 200
+
+Analysis indicators:
+- STRONG_BUY
+- BUY
+- NEUTRAL
+- SELL
+- STRONG_SELL
+
+Example of how the data should look like:
 
 ```
-[{example}]
+{
+  "interval": "SIX_HOURS",
+  "analysisData": {
+    "simpleMovingAverages": [
+      {
+        "period": 5,
+        "value": 21720.034,
+        "indicator": "NEUTRAL"
+      },
+      {
+        "period": 10,
+        "value": 21477.829,
+        "indicator": "NEUTRAL"
+      },
+      {
+        "period": 20,
+        "value": 21011.074,
+        "indicator": "STRONG_BUY"
+      },
+      {
+        "period": 50,
+        "value": 20840.5982,
+        "indicator": "BUY"
+      },
+      {
+        "period": 100,
+        "value": 20521.7347,
+        "indicator": "BUY"
+      },
+      {
+        "period": 200,
+        "value": 23285.4764,
+        "indicator": "NEUTRAL"
+      }
+    ],
+    "exponentialMovingAverages": [
+      {
+        "period": 5,
+        "value": 21480.44981,
+        "indicator": "NEUTRAL"
+      },
+      {
+        "period": 10,
+        "value": 21219.48731,
+        "indicator": "BUY"
+      },
+      {
+        "period": 20,
+        "value": 20778.21281,
+        "indicator": "BUY"
+      },
+      {
+        "period": 50,
+        "value": 20619.44775,
+        "indicator": "NEUTRAL"
+      },
+      {
+        "period": 100,
+        "value": 20698.25329,
+        "indicator": "STRONG_BUY"
+      },
+      {
+        "period": 200,
+        "value": 25140.26348,
+        "indicator": "NEUTRAL"
+      }
+    ]
+  }
+}
 ```
-
-WIP
 
 ### Output
 
-WIP
-
-- example: Description of example
+Since this is an async application there is no output to be received, but events are generated accordingly to the data received, 
+the events should have an indication to BUY or SELL
 
 Example of how the line should look like:
 
 ```
-[{example}]
+{
+    "summary": "BUY",
+    "timestamp": "20-07-2022 02:18:10",
+    "analysed_data": [
+        {
+          "interval": "0NE_MINUTE",  
+          "timestamp": "20-07-2022 02:18:10",
+          "summary": "BUY",
+          "analysis": [
+            {
+                "indicator": "SIMPLE_MOVING_AVERAGE",
+                "summary": "BUY",
+                "score": {
+                    "buy": 4,
+                    "sell": 2
+                }
+            },
+            {
+                "indicator": "EXPONENTIAL_MOVING_AVERAGE",
+                "summary": "NEUTRAL",
+                "score": {
+                    "buy": 3,
+                    "sell": 3
+                }
+            }
+          ]   
+        },
+        {
+          "interval": "FIVE_MINUTES",
+          "timestamp": "20-07-2022 02:18:10",
+          "summary": "STRONG_BUY",
+          "analysis": [
+            {
+                "indicator": "SIMPLE_MOVING_AVERAGE",
+                "summary": "BUY",
+                "score": {
+                    "buy": 4,
+                    "sell": 2
+                }
+            },
+            {
+                "indicator": "EXPONENTIAL_MOVING_AVERAGE",
+                "summary": "NEUTRAL",
+                "score": {
+                    "buy": 3,
+                    "sell": 3
+                }
+            }
+          ]   
+        }
+    ]
+}
 ```
 
 WIP
