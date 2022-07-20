@@ -1,4 +1,7 @@
 {
+  "ts-node": {
+    "files": true
+  },
   "compilerOptions": {
     "target": "es2017",
     "lib": [
@@ -28,10 +31,10 @@
     }
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "resources/**/*"
   ],
   "exclude": [
-    "node_modules",
-    "src/**/*.test.ts"
+    "node_modules"
   ]
 }

@@ -42,6 +42,7 @@
                 "tsx": "never"
             }
         ],
+        "comma-dangle": "off",
         // temporary
         "no-unused-vars": "off",
         "no-empty-function": "off",

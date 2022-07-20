@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf dist",
+    "prebuild:production": "npm run clean && npm run lint && npm run test",
+    "prebuild:localstack": "npm run clean && npm run lint && npm run test",
     "prebuild": "npm run clean && npm run lint && npm run test",
-    "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
+    "build:production": "cross-env NODE_ENV=production babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
+    "build:localstack": "cross-env NODE_ENV=localstack babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
+    "build": "cross-env NODE_ENV=development babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "lint": "eslint --fix --ext .ts .",
-    "dev": "ts-node-dev -r tsconfig-paths/register src/main/application/server.ts --respawn --transpileOnly --ignore-watch node_modules --no-notify",
-    "test": "jest --passWithNoTests",
-    "start": "node dist/server.js"
+    "dev": "ts-node -r tsconfig-paths/register -r dotenv/config src/test/local/Test.test.ts dotenv_config_path=resources/.env.development dotenv_config_debug=true",
+    "test": "jest --passWithNoTests"
   },
   "repository": {
     "type": "git",
@@ -35,20 +38,24 @@
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
+    "babel-plugin-inline-dotenv": "^1.7.0",
     "babel-plugin-module-resolver": "^4.1.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.19.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-import-resolver-typescript": "^3.2.6",
     "eslint-plugin-import": "^2.26.0",
     "jest": "^28.1.3",
     "ts-jest": "^28.0.6",
+    "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.0.0",
     "typescript": "^4.7.4"
   },
   "dependencies": {
+    "aws-lambda": "^1.0.7",
+    "dotenv": "^16.0.1",
     "uuid": "^8.3.2",
-    "winston": "^3.8.1",
-    "aws-lambda": "^1.0.7"
+    "winston": "^3.8.1"
   }
 }

@@ -18,6 +18,23 @@ module.exports = {
         }],
         '@babel/plugin-transform-typescript'
     ],
+    env: {
+        production: {
+            plugins: [["inline-dotenv",{
+                path: './resources/.env.production'
+            }]]
+        },
+        localstack: {
+            plugins: [["inline-dotenv",{
+                path: './resources/.env.localstack',
+            }]]
+        },
+        development: {
+            plugins: [["inline-dotenv",{
+                path: './resources/.env.development'
+            }]]
+        }
+    },
     ignore: [
         '**/*.test.ts'
     ]
