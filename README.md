@@ -8,8 +8,8 @@
     3. [Rules](#rules)
     4. [Built With](#built-with)
        1. [Dependencies](#dependencies)
-       2. [Test Dependencies](#test-dependencies)
-       3. [Plugins](#plugins)
+       2. [Compiler Dependencies](#compiler-dependencies)
+       3. [Test Dependencies](#test-dependencies)
     5. [Roadmap](#roadmap)
 2. [Getting Started](#getting-started)
     1. [Prerequisites](#prerequisites)
@@ -323,31 +323,32 @@ Here are some rules that need to be implemented in this application.
 
 This application is build with Node.js Typescript, code is build using a Dockerfile every deployment into the main branch 
 in GitHub using GitHub actions.
+Local environment is created using localstack for testing purposes using 
+[crypto-robot-localstack](https://github.com/brienze1/crypto-robot-localstack).
 
 #### Dependencies
 
-* [Jackson Databind](https://github.com/FasterXML/jackson-databind)
+* [aws-lambda](https://github.com/FasterXML/jackson-databind)
+* [winston](https://github.com/FasterXML/jackson-databind)
+* [uuid](https://github.com/FasterXML/jackson-databind)
+
+#### Compiler Dependencies
+
+* [typescript](https://github.com/junit-team/junit4): Used to run unit tests
+* [eslint](https://github.com/junit-team/junit4): Used to run unit tests
+* [babel](https://github.com/junit-team/junit4): Used to run unit tests
 
 #### Test Dependencies
 
-* [Junit4](https://github.com/junit-team/junit4): Used to run unit tests
-* [Mockito](https://github.com/mockito/mockito): Used to generate mocks used in unit tests
-* [Cucumber (Junit)](https://cucumber.io/docs/cucumber/api/#junit): Used to integrate cucumber with Junit4
-* [Cucumber (Java)](https://cucumber.io/docs/installation/java/): Used to integrate Gherkin with Java
-
-#### Plugins
-
-* [Maven Compiler Plugin](https://maven.apache.org/plugins/maven-compiler-plugin/): Used to compile the app
-* [Maven Assembly Plugin](https://maven.apache.org/plugins/maven-assembly-plugin/): Used to generate an executable jar
-* [Maven Wrapper](https://maven.apache.org/wrapper/): Used to run mvn commands
+* [jest](https://github.com/junit-team/junit4): Used to run unit tests
+* [ts-jest](https://github.com/junit-team/junit4): Used to run unit tests
 
 ### Roadmap
 
-* [ ] Implement Behaviour tests (BDD) with cucumber
+* [ ] Implement Behaviour tests (BDD) 
 * [ ] Implement Unit tests 
-* [x] Implement application logic 
-* [x] Add maven wrapper to run mvn commands locally 
-* [ ] Create Dockerfile 
+* [ ] Implement application logic 
+* [x] Create Dockerfile 
 * [x] Create Docker compose for local infrastructure 
 * [ ] Document everything in Readme
 
@@ -357,34 +358,31 @@ in GitHub using GitHub actions.
 
 ### Prerequisites
 
-- Install version 18 of the JDK
-    - [Manual](https://adoptium.net/?variant=openjdk18)
-    - [IntelliJ](https://www.jetbrains.com/help/idea/sdk.html#jdk)
+- Install Node and npm
+  - Windows/MacOS/Linux 
+    - [Manual](https://nodejs.org/)
+  - macOS
     - [Homebrew](https://docs.brew.sh/Installation)
       ```bash
-      brew install openjdk@18
+      brew install node
       ```
-
-- Set the `JAVA_HOME` environment variable to the path where your JDK is located
-    - [Windows](https://confluence.atlassian.com/doc/setting-the-java_home-variable-in-windows-8895.html)
-    - macOS/Linux/WSL
+  - Linux
+    - Via terminal
       ```bash
-      echo 'export JAVA_HOME=/path/to/jdk' >> ~/.bashrc 
+      sudo apt install nodejs
+      sudo apt install npm
       ```
 
 - Install Docker (Optional)
     - [Windows/macOS/Linux/WSL](https://www.docker.com/get-started/)
 
+
 ### Installation
 
 - Run the following to install dependencies and compile the project:
-    - Windows
+    - Windows/MacOS/Linux/WSL
       ```bash
-      mvnw.bat clean install
-      ```
-    - macOS/Linux/WSL
-      ```bash
-      ./mvnw clean install
+      npm install && npm run build
       ```
 
 ### Requirements
@@ -392,6 +390,9 @@ in GitHub using GitHub actions.
 To run the application locally, first a local infrastructure needs to be deployed
 
 #### Deploying Local Infrastructure
+
+This requires [docker](#prerequisites) to be installed. Localstack will deploy aws local integration and create the 
+topic used by this application to send the events.
 
 - Start the required infrastructure via localstack using docker compose command:
     - Windows/macOS/Linux/WSL
@@ -412,7 +413,7 @@ To run the application locally, first a local infrastructure needs to be deploye
 - Start the compiled application:
     - Windows/macOS/Linux/WSL
       ```bash
-      java -jar ./application/target/crypto-robot-analysis-generator.jar --spring.profiles.active=localstack
+      npm run dev
       ```
       
 - To stop the application just press Ctrl+C 
@@ -421,9 +422,10 @@ To run the application locally, first a local infrastructure needs to be deploye
 - In case you want to use a Docker container to run the application first you need to build the Docker image from Dockerfile:
     - Windows/macOS/Linux/WSL
       ```bash
-      docker build -t crypto-robot-data-analysis-gen .
+      docker build -t crypto-robot-data-digest .
       ```
       
+[//]: # (TODO fix this)
 - And then run the new created image:
   - Windows/macOS/Linux/WSL
     ```bash
@@ -433,13 +435,9 @@ To run the application locally, first a local infrastructure needs to be deploye
 ### Testing 
 
 - To run the tests just type the command bellow in terminal:
-    - Windows
+    - Windows/macOS/Linux/WSL
       ```bash
-      mvnw.bat test
-      ```
-    - macOS/Linux/WSL
-      ```bash
-      ./mvnw test
+      npm run test
       ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
