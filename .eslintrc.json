@@ -43,6 +43,7 @@
             }
         ],
         "comma-dangle": "off",
+        "no-return-assign": "off",
         // temporary
         "no-unused-vars": "off",
         "no-empty-function": "off",

@@ -1,16 +1,36 @@
 import winston from 'winston';
+import { v4 } from 'uuid';
+
+const myFormat = winston.format.printf(({
+    level,
+    label,
+    timestamp,
+    ...message
+}) => {
+    if (!global.correlationId) {
+        global.correlationId = v4();
+    }
+    if (!global.transactionId) {
+        global.transactionId = v4();
+    }
+
+    return JSON.stringify({
+        level,
+        label,
+        timestamp,
+        correlationId: global.transactionId,
+        transactionId: global.transactionId,
+        message
+    });
+});
 
 export const logger = winston.createLogger({
     format: winston.format.combine(
-        winston.format.json(),
         winston.format.timestamp({
             format: 'YYYY-MM-DD HH:mm:ss',
         }),
+        myFormat
     ),
-    defaultMeta: {
-        correlationId: global.correlationId,
-        transactionId: global.transactionId,
-    },
     transports: [
         new winston.transports.Console(),
     ],
