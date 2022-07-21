@@ -12,7 +12,7 @@
     "build:localstack": "cross-env NODE_ENV=localstack babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "build": "cross-env NODE_ENV=development babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "lint": "eslint --fix --ext .ts .",
-    "dev": "ts-node -r tsconfig-paths/register -r dotenv/config src/test/local/Test.test.ts dotenv_config_path=resources/.env.development dotenv_config_debug=true",
+    "dev": "ts-node -r tsconfig-paths/register -r dotenv/config src/test/local/LocalTest.test.ts dotenv_config_path=resources/.env.development dotenv_config_debug=true",
     "test": "jest --passWithNoTests"
   },
   "repository": {
