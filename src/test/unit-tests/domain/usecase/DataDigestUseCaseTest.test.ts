@@ -1,13 +1,12 @@
 import { AnalysisIndicator } from '@/domain/model/AnalysisIndicator';
 import DataDigestUseCase from '@/domain/usecase/DataDigestUseCase';
 import { AnalyzedData } from '@/domain/model/AnalyzedData';
-import AnalysisService from '@/domain/service/AnalysisService';
 import { AnalyzedDataPersistence } from '@/domain/adapter/AnalysedDataPersistenceAdapter';
 import { AnalysisEventService } from '@/domain/adapter/AnalysisEventAdapter';
-import { v4 } from 'uuid';
-
-jest.mock('@/domain/service/AnalysisService');
-const AnalysisServiceMock = jest.mocked(AnalysisService, true);
+import { Interval } from '@/domain/model/Interval';
+import { Period } from '@/domain/model/Period';
+import { Indicator } from '@/domain/model/Indicator';
+import { AnalysisSummary } from '@/domain/model/AnalysisSummary';
 
 jest.mock('@/domain/adapter/AnalysedDataPersistenceAdapter');
 const AnalyzedDataPersistenceMock = jest.mocked(AnalyzedDataPersistence, true);
@@ -17,37 +16,106 @@ const AnalysisEventServiceMock = jest.mocked(AnalysisEventService, true);
 
 describe('Data Digest Use Case Tests', () => {
     let analysisIndicator: AnalysisIndicator;
-    let analyzedData: AnalyzedData;
     let analyzedDataSet: AnalyzedData[];
-    let analysisSummary: String;
+    let analysisSummary: AnalysisSummary;
 
     beforeEach(() => {
-        analysisIndicator = JSON.parse('{}');
-        analyzedData = JSON.parse('{}');
-        analyzedDataSet = [];
-        analysisSummary = v4();
+        analysisIndicator = new AnalysisIndicator(
+            JSON.parse(
+                JSON.stringify({
+                    interval: Interval.ONE_DAY,
+                    timestamp: new Date().toISOString(),
+                    analysisData: {
+                        simpleMovingAverages: [
+                            {
+                                period: Period.FIVE,
+                                value: 22479.072,
+                                indicator: Indicator.NEUTRAL,
+                            },
+                            {
+                                period: Period.TEN,
+                                value: 21457.346,
+                                indicator: Indicator.BUY,
+                            },
+                            {
+                                period: Period.TWENTY,
+                                value: 20987.8395,
+                                indicator: Indicator.BUY,
+                            },
+                            {
+                                period: Period.FIFTY,
+                                value: 22815.0182,
+                                indicator: Indicator.NEUTRAL,
+                            },
+                            {
+                                period: Period.HUNDRED,
+                                value: 28716.1748,
+                                indicator: Indicator.NEUTRAL,
+                            },
+                            {
+                                period: Period.TWO_HUNDRED,
+                                value: 35075.6691,
+                                indicator: Indicator.NEUTRAL,
+                            },
+                        ],
+                        exponentialMovingAverages: [
+                            {
+                                period: Period.FIVE,
+                                value: 22094.03041,
+                                indicator: Indicator.NEUTRAL,
+                            },
+                            {
+                                period: Period.TEN,
+                                value: 21009.22521,
+                                indicator: Indicator.BUY,
+                            },
+                            {
+                                period: Period.TWENTY,
+                                value: 20475.42766,
+                                indicator: Indicator.BUY,
+                            },
+                            {
+                                period: Period.FIFTY,
+                                value: 24912.26174,
+                                indicator: Indicator.NEUTRAL,
+                            },
+                            {
+                                period: Period.HUNDRED,
+                                value: 32123.80436,
+                                indicator: Indicator.NEUTRAL,
+                            },
+                            {
+                                period: Period.TWO_HUNDRED,
+                                value: 38738.82237,
+                                indicator: Indicator.NEUTRAL,
+                            },
+                        ],
+                    },
+                })
+            )
+        );
 
-        AnalysisServiceMock.getLatestAnalyzedData.mockReturnValue(analyzedData);
+        analyzedDataSet = [];
+
+        Object.values(Interval).forEach((interval) => {
+            const data = new AnalyzedData(interval, new Date().toISOString(), analysisIndicator.analysisData.generateAnalysis());
+            analyzedDataSet.push(data);
+        });
 
         AnalyzedDataPersistenceMock.getAllAnalyzedData.mockReturnValue(analyzedDataSet);
 
-        AnalysisServiceMock.generateSummary.mockReturnValue(analysisSummary);
+        analysisSummary = new AnalysisSummary(analyzedDataSet);
     });
 
     it('should perform all use-case tasks correctly', () => {
         const resp = DataDigestUseCase.digest(analysisIndicator);
 
-        expect(AnalysisServiceMock.getLatestAnalyzedData).toHaveBeenCalledTimes(1);
-        expect(AnalysisServiceMock.getLatestAnalyzedData).toHaveBeenCalledWith(analysisIndicator);
-        expect(AnalysisServiceMock.getLatestAnalyzedData).toHaveReturnedWith(analyzedData);
+        expect(AnalyzedDataPersistenceMock.update).toHaveBeenCalledTimes(1);
         expect(AnalyzedDataPersistenceMock.getAllAnalyzedData).toHaveBeenCalledTimes(1);
         expect(AnalyzedDataPersistenceMock.getAllAnalyzedData).toHaveBeenCalledWith();
         expect(AnalyzedDataPersistenceMock.getAllAnalyzedData).toHaveReturnedWith(analyzedDataSet);
-        expect(AnalysisServiceMock.generateSummary).toHaveBeenCalledTimes(1);
-        expect(AnalysisServiceMock.generateSummary).toHaveBeenCalledWith(analyzedDataSet, analyzedData);
-        expect(AnalysisServiceMock.generateSummary).toHaveReturnedWith(analysisSummary);
         expect(AnalysisEventServiceMock.sendEvent).toHaveBeenCalledTimes(1);
         expect(AnalysisEventServiceMock.sendEvent).toHaveBeenCalledWith(analysisSummary);
-        expect(resp).toEqual(resp);
+        expect(resp).toEqual(analysisSummary);
     });
 });

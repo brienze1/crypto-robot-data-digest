@@ -148,8 +148,8 @@ Example of how the line should look like:
           "summary": "BUY",
           "analysis": [
             {
-                "indicator": "SIMPLE_MOVING_AVERAGE",
-                "summary": "BUY",
+                "metric": "SIMPLE_MOVING_AVERAGE",
+                "indicator": "BUY",
                 "score": {
                     "buy": 4,
                     "sell": 2

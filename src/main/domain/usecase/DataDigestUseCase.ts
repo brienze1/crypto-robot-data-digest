@@ -1,21 +1,23 @@
 import { AnalysisIndicator } from '@/domain/model/AnalysisIndicator';
-import AnalysisService from '@/domain/service/AnalysisService';
 import { AnalyzedDataPersistence } from '@/domain/adapter/AnalysedDataPersistenceAdapter';
 import { AnalyzedData } from '@/domain/model/AnalyzedData';
 import { AnalysisEventService } from '@/domain/adapter/AnalysisEventAdapter';
+import { AnalysisSummary } from '@/domain/model/AnalysisSummary';
 
 class DataDigestUseCase {
     digest(analysisIndicator: AnalysisIndicator) {
-        // TODO get latest analyzed data
-        const analyzedData: AnalyzedData = AnalysisService.getLatestAnalyzedData(analysisIndicator);
+        const analyzedData: AnalyzedData = new AnalyzedData(
+            analysisIndicator.interval,
+            analysisIndicator.timestamp,
+            analysisIndicator.analysisData.generateAnalysis()
+        );
 
-        // TODO get all evaluated data
+        AnalyzedDataPersistence.update(analyzedData);
+
         const analyzedDataSet: AnalyzedData[] = AnalyzedDataPersistence.getAllAnalyzedData();
 
-        // TODO generate summary
-        const analysisSummary = AnalysisService.generateSummary(analyzedDataSet, analyzedData);
+        const analysisSummary = new AnalysisSummary(analyzedDataSet);
 
-        // TODO send event (BUY, SELL)
         AnalysisEventService.sendEvent(analysisSummary);
 
         return analysisSummary;
