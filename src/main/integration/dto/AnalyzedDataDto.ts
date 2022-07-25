@@ -2,9 +2,9 @@ import { AnalysisDto } from '@/integration/dto/AnalysisDto';
 import { AnalyzedData } from '@/domain/model/AnalyzedData';
 
 export class AnalyzedDataDto {
-    readonly interval: String;
-    readonly timestamp: String;
-    readonly summary: String;
+    readonly interval: string;
+    readonly timestamp: string;
+    readonly summary: string;
     readonly analysis: AnalysisDto[] = [];
 
     constructor(analyzedData: AnalyzedData) {

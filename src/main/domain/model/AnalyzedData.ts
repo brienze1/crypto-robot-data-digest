@@ -5,11 +5,11 @@ import { Score } from '@/domain/model/Score';
 
 export class AnalyzedData {
     readonly interval: Interval;
-    readonly timestamp: String;
+    readonly timestamp: string;
     readonly summary: Indicator;
     readonly analysis: Analysis[] = [];
 
-    constructor(interval: Interval, timestamp: String, analysis: Analysis[]) {
+    constructor(interval: Interval, timestamp: string, analysis: Analysis[]) {
         this.interval = interval;
         this.timestamp = timestamp;
         this.analysis = analysis;

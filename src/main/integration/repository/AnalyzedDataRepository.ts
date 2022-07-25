@@ -3,7 +3,7 @@ import { AnalyzedDataDto } from '@/integration/dto/AnalyzedDataDto';
 import { Document } from 'dynamoose/dist/Document';
 import { CONFIG } from '@/application/config/Config';
 
-const Dynamoose = AwsConfig.getDynamoose();
+const { Dynamoose } = AwsConfig;
 
 interface AnalysedDataDtoModel extends Document, AnalyzedDataDto {}
 

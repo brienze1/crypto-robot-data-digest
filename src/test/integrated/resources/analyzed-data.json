@@ -1,0 +1,22 @@
+{
+    "interval": "SIX_HOURS",
+    "summary": "BUY",
+    "analysis": [
+        {
+            "indicator": "BUY",
+            "metric": "SIMPLE_MOVING_AVERAGE",
+            "score": {
+                "sellCount": 0,
+                "buyCount": 4
+            }
+        },
+        {
+            "indicator": "BUY",
+            "metric": "EXPONENTIAL_MOVING_AVERAGE",
+            "score": {
+                "sellCount": 0,
+                "buyCount": 4
+            }
+        }
+    ]
+}

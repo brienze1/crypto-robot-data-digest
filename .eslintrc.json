@@ -4,9 +4,7 @@
         "node": true,
         "jest": true
     },
-    "extends": [
-        "airbnb-base"
-    ],
+    "extends": ["airbnb-base"],
     "settings": {
         "import/resolver": {
             "typescript": {}
@@ -16,12 +14,20 @@
     "parserOptions": {
         "tsconfigRootDir": "./"
     },
-    "plugins": [
-        "@typescript-eslint",
-        "import"
-    ],
+    "plugins": ["@typescript-eslint", "import"],
     "rules": {
+        "no-use-before-define": "off",
+        "no-trailing-spaces": "off",
         "consistent-return": "off",
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": ["src/test/**"],
+                "optionalDependencies": false,
+                "peerDependencies": true
+            }
+        ],
+        "object-curly-newline": "off",
         "function-paren-newline": "off",
         "implicit-arrow-linebreak": "off",
         "operator-linebreak": "off",
@@ -34,7 +40,7 @@
         "no-shadow": "off",
         "@typescript-eslint/no-shadow": ["error"],
         "no-undef": "off",
-        "indent": ["error",4, { "SwitchCase": 1 }],
+        "indent": ["error", 4, { "SwitchCase": 1 }],
         "import/extensions": [
             "error",
             "ignorePackages",

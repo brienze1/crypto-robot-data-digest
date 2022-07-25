@@ -3,7 +3,7 @@ import { Interval } from '@/domain/model/Interval';
 
 export class AnalysisIndicator {
     readonly interval: Interval;
-    readonly timestamp: String;
+    readonly timestamp: string;
     readonly analysisData: AnalysisData;
 
     constructor(analysisIndicator: AnalysisIndicator) {

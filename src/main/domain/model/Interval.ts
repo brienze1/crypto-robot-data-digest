@@ -7,5 +7,5 @@ export class Interval {
     public static readonly SIX_HOURS = new Interval('6h', 'SIX_HOURS', 1);
     public static readonly ONE_DAY = new Interval('1d', 'ONE_DAY', 1);
 
-    private constructor(readonly value: String, readonly description: String, readonly weight: Number) {}
+    private constructor(readonly value: String, readonly description: string, readonly weight: Number) {}
 }
