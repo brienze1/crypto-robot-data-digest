@@ -55,6 +55,7 @@
   "dependencies": {
     "aws-lambda": "^1.0.7",
     "dotenv": "^16.0.1",
+    "dynamoose": "^2.8.6",
     "uuid": "^8.3.2",
     "winston": "^3.8.1"
   }

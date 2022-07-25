@@ -72,17 +72,17 @@ describe('Data Digest Use Case Tests', () => {
                             {
                                 period: Period.TWENTY,
                                 value: 20475.42766,
-                                indicator: Indicator.BUY,
+                                indicator: Indicator.SELL,
                             },
                             {
                                 period: Period.FIFTY,
                                 value: 24912.26174,
-                                indicator: Indicator.NEUTRAL,
+                                indicator: Indicator.STRONG_SELL,
                             },
                             {
                                 period: Period.HUNDRED,
                                 value: 32123.80436,
-                                indicator: Indicator.NEUTRAL,
+                                indicator: Indicator.STRONG_BUY,
                             },
                             {
                                 period: Period.TWO_HUNDRED,
@@ -102,20 +102,19 @@ describe('Data Digest Use Case Tests', () => {
             analyzedDataSet.push(data);
         });
 
-        AnalyzedDataPersistenceMock.getAllAnalyzedData.mockReturnValue(analyzedDataSet);
+        AnalyzedDataPersistenceMock.getAllAnalyzedData.mockResolvedValue(analyzedDataSet);
 
         analysisSummary = new AnalysisSummary(analyzedDataSet);
     });
 
-    it('should perform all use-case tasks correctly', () => {
-        const resp = DataDigestUseCase.digest(analysisIndicator);
+    it('should perform all use-case tasks correctly', async () => {
+        const resp = await DataDigestUseCase.digest(analysisIndicator);
 
         expect(AnalyzedDataPersistenceMock.update).toHaveBeenCalledTimes(1);
         expect(AnalyzedDataPersistenceMock.getAllAnalyzedData).toHaveBeenCalledTimes(1);
         expect(AnalyzedDataPersistenceMock.getAllAnalyzedData).toHaveBeenCalledWith();
-        expect(AnalyzedDataPersistenceMock.getAllAnalyzedData).toHaveReturnedWith(analyzedDataSet);
         expect(AnalysisEventServiceMock.sendEvent).toHaveBeenCalledTimes(1);
-        expect(AnalysisEventServiceMock.sendEvent).toHaveBeenCalledWith(analysisSummary);
-        expect(resp).toEqual(analysisSummary);
+        expect(resp.summary).toEqual(analysisSummary.summary);
+        expect(resp.analyzedData).toEqual(analysisSummary.analyzedData);
     });
 });

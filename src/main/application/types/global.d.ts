@@ -1,6 +1,6 @@
 declare global {
-    var correlationId: string;
-    var transactionId: string;
+    var correlationId: String;
+    var transactionId: String;
 }
 
 export {};

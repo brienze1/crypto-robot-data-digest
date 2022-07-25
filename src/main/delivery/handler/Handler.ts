@@ -1,5 +1,4 @@
 import { Context, SQSEvent } from 'aws-lambda';
-
 import DataDigestUseCase from '@/domain/usecase/DataDigestUseCase';
 import { logger } from '@/application/config/LoggerConfig';
 import { AnalysisIndicator } from '@/domain/model/AnalysisIndicator';
@@ -12,5 +11,7 @@ export const execute = async (event: SQSEvent, context: Context) => {
 
     const analysisIndicator = new AnalysisIndicator(analysisIndicatorDto);
 
-    DataDigestUseCase.digest(analysisIndicator);
+    await DataDigestUseCase.digest(analysisIndicator);
+
+    return true;
 };

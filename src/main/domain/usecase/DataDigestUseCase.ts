@@ -5,16 +5,16 @@ import { AnalysisEventService } from '@/domain/adapter/AnalysisEventAdapter';
 import { AnalysisSummary } from '@/domain/model/AnalysisSummary';
 
 class DataDigestUseCase {
-    digest(analysisIndicator: AnalysisIndicator) {
+    async digest(analysisIndicator: AnalysisIndicator) {
         const analyzedData: AnalyzedData = new AnalyzedData(
             analysisIndicator.interval,
             analysisIndicator.timestamp,
             analysisIndicator.analysisData.generateAnalysis()
         );
 
-        AnalyzedDataPersistence.update(analyzedData);
+        await AnalyzedDataPersistence.update(analyzedData);
 
-        const analyzedDataSet: AnalyzedData[] = AnalyzedDataPersistence.getAllAnalyzedData();
+        const analyzedDataSet: AnalyzedData[] = await AnalyzedDataPersistence.getAllAnalyzedData();
 
         const analysisSummary = new AnalysisSummary(analyzedDataSet);
 

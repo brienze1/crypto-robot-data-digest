@@ -17,8 +17,8 @@ const event: SQSEvent = {
                     "Type": "Notification", 
                     "MessageId": "41cf51ea-1a79-4864-9132-b15c8dd040cd", 
                     "TopicArn": "arn:aws:sns:sa-east-1:000000000000:cryptoAnalysisTopic", 
-                    "Message": "{\\"interval\\":\\"ONE_DAY\\",\\"analysisData\\":{\\"simpleMovingAverages\\":[{\\"period\\":\\"FIVE\\",\\"value\\":22479.07200,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"TEN\\",\\"value\\":21457.34600,\\"indicator\\":\\"BUY\\"},{\\"period\\":\\"TWENTY\\",\\"value\\":20987.83950,\\"indicator\\":\\"BUY\\"},{\\"period\\":\\"FIFTY\\",\\"value\\":22815.01820,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"HUNDRED\\",\\"value\\":28716.17480,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"TWO_HUNDRED\\",\\"value\\":35075.66910,\\"indicator\\":\\"NEUTRAL\\"}],\\"exponentialMovingAverages\\":[{\\"period\\":\\"FIVE\\",\\"value\\":22094.03041,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"TEN\\",\\"value\\":21009.22521,\\"indicator\\":\\"BUY\\"},{\\"period\\":\\"TWENTY\\",\\"value\\":20475.42766,\\"indicator\\":\\"BUY\\"},{\\"period\\":\\"FIFTY\\",\\"value\\":24912.26174,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"HUNDRED\\",\\"value\\":32123.80436,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"TWO_HUNDRED\\",\\"value\\":38738.82237,\\"indicator\\":\\"NEUTRAL\\"}]}}", 
-                    "Timestamp": "2022-07-21T14:58:58.971Z", 
+                    "Message": "{\\"interval\\":\\"ONE_DAY\\",\\"timestamp\\":\\"2022-07-22T11:47:33\\",\\"analysisData\\":{\\"simpleMovingAverages\\":[{\\"period\\":\\"FIVE\\",\\"value\\":22479.07200,\\"indicator\\":\\"SELL\\"},{\\"period\\":\\"TEN\\",\\"value\\":21457.34600,\\"indicator\\":\\"SELL\\"},{\\"period\\":\\"TWENTY\\",\\"value\\":20987.83950,\\"indicator\\":\\"SELL\\"},{\\"period\\":\\"FIFTY\\",\\"value\\":22815.01820,\\"indicator\\":\\"SELL\\"},{\\"period\\":\\"HUNDRED\\",\\"value\\":28716.17480,\\"indicator\\":\\"SELL\\"},{\\"period\\":\\"TWO_HUNDRED\\",\\"value\\":35075.66910,\\"indicator\\":\\"SELL\\"}],\\"exponentialMovingAverages\\":[{\\"period\\":\\"FIVE\\",\\"value\\":22094.03041,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"TEN\\",\\"value\\":21009.22521,\\"indicator\\":\\"BUY\\"},{\\"period\\":\\"TWENTY\\",\\"value\\":20475.42766,\\"indicator\\":\\"BUY\\"},{\\"period\\":\\"FIFTY\\",\\"value\\":24912.26174,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"HUNDRED\\",\\"value\\":32123.80436,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"TWO_HUNDRED\\",\\"value\\":38738.82237,\\"indicator\\":\\"NEUTRAL\\"}]}}", 
+                    "Timestamp": "2022-07-21T14:58:58.971", 
                     "SignatureVersion": "1", 
                     "Signature": "EXAMPLEpH+..", 
                     "SigningCertURL": "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-0000000000000000000000.pem", 
@@ -45,12 +45,12 @@ const context: Context = {
     logGroupName: '/aws/lambda/dataDigestLambda',
     logStreamName: '2022/07/20/[$LATEST]aa635465c6d543869ec4428f0b19b123',
     memoryLimitInMB: '1536',
-    done(error?: Error, result?: any): void {},
-    fail(error: Error | string): void {},
+    done(): void {},
+    fail(): void {},
     getRemainingTimeInMillis(): number {
         return 0;
     },
-    succeed(message: any, object?: any): void {},
+    succeed(): void {},
 };
 
 const response = handler.execute(event, context);

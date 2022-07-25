@@ -4,13 +4,13 @@ import { Metric } from '@/domain/model/Metric';
 
 export class Analysis {
     readonly metric: Metric;
-    readonly score: Score;
     private _indicator: Indicator;
+    readonly score: Score;
 
-    constructor(metric: Metric) {
-        this._indicator = Indicator.NEUTRAL;
+    constructor(metric: Metric, indicator: Indicator = Indicator.NEUTRAL, score: Score = new Score(),) {
         this.metric = metric;
-        this.score = new Score();
+        this._indicator = indicator;
+        this.score = score;
     }
 
     addScore(indicator: Indicator) {

@@ -18,7 +18,7 @@ const myFormat = winston.format.printf(({
         level,
         label,
         timestamp,
-        correlationId: global.transactionId,
+        correlationId: global.correlationId,
         transactionId: global.transactionId,
         message
     });

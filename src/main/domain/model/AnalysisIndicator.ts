@@ -7,7 +7,7 @@ export class AnalysisIndicator {
     readonly analysisData: AnalysisData;
 
     constructor(analysisIndicator: AnalysisIndicator) {
-        this.interval = analysisIndicator.interval;
+        this.interval = Interval[analysisIndicator.interval as unknown as keyof typeof Interval];
         this.timestamp = analysisIndicator.timestamp;
         this.analysisData = new AnalysisData(analysisIndicator.analysisData);
     }

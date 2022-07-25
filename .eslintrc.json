@@ -21,6 +21,9 @@
         "import"
     ],
     "rules": {
+        "consistent-return": "off",
+        "function-paren-newline": "off",
+        "implicit-arrow-linebreak": "off",
         "operator-linebreak": "off",
         "default-case": "off",
         "max-len": "off",

@@ -8,7 +8,7 @@ export class AnalysisSummary {
     readonly analyzedData: AnalyzedData[];
 
     constructor(analyzedDataSet: AnalyzedData[]) {
-        this.timestamp = '0';
+        this.timestamp = new Date().toISOString();
         this.analyzedData = analyzedDataSet;
         this.summary = this.generateSummary(analyzedDataSet);
     }

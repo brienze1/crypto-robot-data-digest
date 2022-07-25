@@ -1,27 +1,35 @@
 import { Indicator } from '@/domain/model/Indicator';
 
 export class Score {
-    private buyCount: number;
-    private sellCount: number;
+    private _buyCount: number;
+    private _sellCount: number;
 
-    constructor() {
-        this.buyCount = 0;
-        this.sellCount = 0;
+    constructor(buyCount: number = 0, sellCount: number = 0) {
+        this._buyCount = buyCount;
+        this._sellCount = sellCount;
+    }
+
+    get buyCount(): number {
+        return this._buyCount;
+    }
+
+    get sellCount(): number {
+        return this._sellCount;
     }
 
     private addBuy(value: number = 1) {
-        this.buyCount += value;
+        this._buyCount += value;
     }
 
     private addSell(value: number = 1) {
-        this.sellCount += value;
+        this._sellCount += value;
     }
 
     getScoreIndicator(): Indicator {
-        if (this.buyCount > this.sellCount) {
+        if (this._buyCount > this._sellCount) {
             return Indicator.BUY;
         }
-        if (this.buyCount < this.sellCount) {
+        if (this._buyCount < this._sellCount) {
             return Indicator.SELL;
         }
         return Indicator.NEUTRAL;

@@ -7,8 +7,8 @@ export class MovingAverage {
     readonly indicator: Indicator;
 
     constructor(movingAverage: MovingAverage) {
-        this.period = movingAverage.period;
+        this.period = Period[movingAverage.period as unknown as keyof typeof Period];
         this.value = movingAverage.value;
-        this.indicator = movingAverage.indicator;
+        this.indicator = Indicator[movingAverage.indicator];
     }
 }
