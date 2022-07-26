@@ -35,7 +35,7 @@ export class DataDigestSteps {
 
         AWSMock.setSDKInstance(AWS);
 
-        publishSpy = sinon.spy();
+        publishSpy = sinon.stub().resolves();
 
         AWSMock.mock('SNS', 'publish', publishSpy);
     }

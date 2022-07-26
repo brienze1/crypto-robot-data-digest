@@ -8,7 +8,7 @@ class AnalysisEventSnsService implements AnalysisEventAdapter {
         await new AwsConfig.AWS.SNS().publish({
             Message: JSON.stringify(analysisSummary),
             TopicArn: CONFIG.SNS.ANALYSIS_SUMMARY.TOPIC_ARN,
-        });
+        }).promise();
 
         return true;
     }
