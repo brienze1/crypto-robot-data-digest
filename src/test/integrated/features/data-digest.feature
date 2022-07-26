@@ -1,4 +1,4 @@
-Feature: Bank Account
+Feature: Data Digest
 
   Scenario: Stores money
     Given DynamoDB analyzedData table is empty

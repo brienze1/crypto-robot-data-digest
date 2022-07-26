@@ -3,13 +3,11 @@ import { defineParameterType, setDefaultTimeout } from '@cucumber/cucumber';
 import * as fs from 'fs';
 import { Context, SNSMessage, SQSEvent } from 'aws-lambda';
 import { AnalyzedDataDto } from '@/integration/dto/AnalyzedDataDto';
-import { CONFIG } from '@/application/config/Config';
-import localDynamo from 'local-dynamo';
 import * as Handler from '@/delivery/handler/Handler';
 import { assert } from 'chai';
 import { AnalyzedDataRepository } from '@/integration/repository/AnalyzedDataRepository';
 import AWSMock from 'aws-sdk-mock';
-import AWS, { DynamoDB } from 'aws-sdk';
+import AWS from 'aws-sdk';
 import { logger } from '@/application/config/LoggerConfig';
 import sinon from 'sinon';
 import { AnalysisSummary } from '@/domain/model/AnalysisSummary';
@@ -23,83 +21,51 @@ defineParameterType({
 });
 
 let eventMessage: any;
-let dynamoDbLocal: any;
 let handlerResponse: boolean;
 let publishSpy: any;
+let analyzedDataDtoSet: AnalyzedDataDto[];
+let analyzedDataRepositoryUpdateMock: any;
+let analyzedDataRepositoryScanMock: any;
 
 @binding()
 export class DataDigestSteps {
     @before()
     async before(): Promise<void> {
-        try {
-            dynamoDbLocal = await localDynamo.launch({
-                port: CONFIG.DYNAMODB.PORT,
-                detached: false,
-            });
-            dynamoDbLocal.kill();
+        setDefaultTimeout(60 * 10000);
 
-            AWSMock.setSDKInstance(AWS);
+        AWSMock.setSDKInstance(AWS);
 
-            publishSpy = sinon.spy();
+        publishSpy = sinon.spy();
 
-            AWSMock.mock('SNS', 'publish', publishSpy);
-
-            // eslint-disable-next-line no-empty
-        } catch (ex) {}
+        AWSMock.mock('SNS', 'publish', publishSpy);
     }
 
     @after()
     async after() {
-        try {
-            AWSMock.restore('SNS');
+        AWSMock.restore('SNS');
 
-            publishSpy = undefined;
+        publishSpy = undefined;
 
-            dynamoDbLocal.kill();
-            // eslint-disable-next-line no-empty
-        } catch (ex) {}
+        analyzedDataRepositoryUpdateMock.restore();
+        analyzedDataRepositoryScanMock.restore();
     }
 
     @given('DynamoDB analyzedData table is empty')
     async dynamoDBAnalyzedDataTableIsEmpty() {
-        setDefaultTimeout(60 * 10000);
+        analyzedDataDtoSet = [];
 
-        dynamoDbLocal = await localDynamo.launch({
-            port: CONFIG.DYNAMODB.PORT,
-            detached: false,
-        });
-
-        const client = new DynamoDB({
-            endpoint: `${CONFIG.DYNAMODB.URL}:${CONFIG.DYNAMODB.PORT}`,
-            region: process.env.AWS_REGION,
-        });
-
-        try {
-            await client.deleteTable({
-                TableName: `${CONFIG.DYNAMODB.DATABASE_NAME}.${CONFIG.DYNAMODB.ANALYZED_DATA.TABLE_NAME}`,
+        analyzedDataRepositoryUpdateMock = sinon
+            .stub(AnalyzedDataRepository, 'update')
+            .callsFake((analyzedDataDto: Partial<AnalyzedDataDto>) => {
+                if (analyzedDataDto instanceof AnalyzedDataDto) {
+                    analyzedDataDtoSet.push(analyzedDataDto);
+                }
             });
-            // eslint-disable-next-line no-empty
-        } catch (ex) {}
 
-        await client.createTable({
-            TableName: `${CONFIG.DYNAMODB.DATABASE_NAME}.${CONFIG.DYNAMODB.ANALYZED_DATA.TABLE_NAME}`,
-            AttributeDefinitions: [
-                {
-                    AttributeName: 'interval',
-                    AttributeType: 'S',
-                },
-            ],
-            KeySchema: [
-                {
-                    AttributeName: 'interval',
-                    KeyType: 'HASH',
-                },
-            ],
-            ProvisionedThroughput: {
-                ReadCapacityUnits: 5,
-                WriteCapacityUnits: 5,
-            },
-        });
+        // @ts-ignore
+        analyzedDataRepositoryScanMock = sinon.stub(AnalyzedDataRepository, 'scan').callsFake(() => ({
+            exec: sinon.stub().resolves(analyzedDataDtoSet),
+        }));
     }
 
     @given('The following analysis data was received {string}')
@@ -122,9 +88,12 @@ export class DataDigestSteps {
     async theFollowingAnalyzedDataShouldBeStoredInDynamoDB(jsonFile: string) {
         const expectedAnalyzedDataDto: AnalyzedDataDto = DataDigestSteps.getJsonFile(jsonFile);
 
-        const analyzedDataDtoSaved = await AnalyzedDataRepository.get(expectedAnalyzedDataDto.interval);
-
-        assert.deepEqual({ ...analyzedDataDtoSaved }, { ...expectedAnalyzedDataDto });
+        assert.isTrue(analyzedDataRepositoryUpdateMock.calledOnce);
+        assert.isTrue(analyzedDataRepositoryScanMock.calledOnce);
+        assert.deepEqual(analyzedDataDtoSet[0].interval, expectedAnalyzedDataDto.interval);
+        assert.deepEqual(analyzedDataDtoSet[0].summary, expectedAnalyzedDataDto.summary);
+        assert.deepEqual(analyzedDataDtoSet[0].analysis[0], expectedAnalyzedDataDto.analysis[0]);
+        assert.deepEqual(analyzedDataDtoSet[0].analysis[1], expectedAnalyzedDataDto.analysis[1]);
     }
 
     @then('The following analyzed data should be sent out via SNS event {string}')
