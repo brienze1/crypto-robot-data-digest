@@ -1,12 +1,7 @@
 import winston from 'winston';
 import { v4 } from 'uuid';
 
-const myFormat = winston.format.printf(({
-    level,
-    label,
-    timestamp,
-    ...message
-}) => {
+const myFormat = winston.format.printf(({ level, label, timestamp, ...message }) => {
     if (!global.correlationId) {
         global.correlationId = v4();
     }
@@ -20,7 +15,7 @@ const myFormat = winston.format.printf(({
         timestamp,
         correlationId: global.correlationId,
         transactionId: global.transactionId,
-        message
+        data: message,
     });
 });
 
@@ -31,7 +26,5 @@ export const logger = winston.createLogger({
         }),
         myFormat
     ),
-    transports: [
-        new winston.transports.Console(),
-    ],
+    transports: [new winston.transports.Console()],
 });

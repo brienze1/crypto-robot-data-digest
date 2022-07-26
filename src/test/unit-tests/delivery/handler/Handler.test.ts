@@ -79,8 +79,8 @@ describe('Handler test', () => {
         const response = await Handler.execute(event, context);
 
         expect(global.correlationId).toEqual(context.awsRequestId);
-        expect(loggerMock.info).toHaveBeenCalledTimes(2);
-        expect(loggerMock.info).toHaveBeenCalledWith({ event, context });
+        expect(loggerMock.info).toHaveBeenCalledTimes(1);
+        expect(loggerMock.info).toHaveBeenCalledWith('new event received', event, context);
         expect(DataDigestUseCaseMock.digest).toHaveBeenCalledTimes(1);
         expect(DataDigestUseCaseMock.digest).toHaveBeenCalledWith(analysisIndicator);
         expect(response).toEqual(true);
