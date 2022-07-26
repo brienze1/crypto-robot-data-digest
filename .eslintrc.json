@@ -4,9 +4,7 @@
         "node": true,
         "jest": true
     },
-    "extends": [
-        "airbnb-base"
-    ],
+    "extends": ["airbnb-base"],
     "settings": {
         "import/resolver": {
             "typescript": {}
@@ -16,11 +14,25 @@
     "parserOptions": {
         "tsconfigRootDir": "./"
     },
-    "plugins": [
-        "@typescript-eslint",
-        "import"
-    ],
+    "plugins": ["@typescript-eslint", "import"],
     "rules": {
+        "no-use-before-define": "off",
+        "no-trailing-spaces": "off",
+        "consistent-return": "off",
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": ["src/test/**"],
+                "optionalDependencies": false,
+                "peerDependencies": true
+            }
+        ],
+        "object-curly-newline": "off",
+        "function-paren-newline": "off",
+        "implicit-arrow-linebreak": "off",
+        "operator-linebreak": "off",
+        "default-case": "off",
+        "max-len": "off",
         "no-underscore-dangle": "off",
         "import/prefer-default-export": "off",
         "class-methods-use-this": "off",
@@ -28,10 +40,7 @@
         "no-shadow": "off",
         "@typescript-eslint/no-shadow": ["error"],
         "no-undef": "off",
-        "indent": [
-            "error",
-            4
-        ],
+        "indent": ["error", 4, { "SwitchCase": 1 }],
         "import/extensions": [
             "error",
             "ignorePackages",
@@ -41,6 +50,12 @@
                 "ts": "never",
                 "tsx": "never"
             }
-        ]
+        ],
+        "comma-dangle": "off",
+        "no-return-assign": "off",
+        // temporary
+        "no-unused-vars": "off",
+        "no-empty-function": "off",
+        "no-useless-constructor": "off"
     }
 }

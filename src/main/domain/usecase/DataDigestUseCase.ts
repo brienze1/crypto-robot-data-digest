@@ -1,14 +1,26 @@
+import { AnalysisIndicator } from '@/domain/model/AnalysisIndicator';
+import { AnalyzedDataPersistence } from '@/domain/adapter/AnalysedDataPersistenceAdapter';
+import { AnalyzedData } from '@/domain/model/AnalyzedData';
+import { AnalysisEventService } from '@/domain/adapter/AnalysisEventAdapter';
+import { AnalysisSummary } from '@/domain/model/AnalysisSummary';
+
 class DataDigestUseCase {
-    digest() {
-        //TODO update data
+    async digest(analysisIndicator: AnalysisIndicator) {
+        const analyzedData: AnalyzedData = new AnalyzedData(
+            analysisIndicator.interval,
+            analysisIndicator.timestamp,
+            analysisIndicator.analysisData.generateAnalysis()
+        );
 
-        //TODO get other data
+        await AnalyzedDataPersistence.update(analyzedData);
 
-        //TODO evaluate if all data required exists
+        const analyzedDataSet: AnalyzedData[] = await AnalyzedDataPersistence.getAllAnalyzedData();
 
-        //TODO digest data
+        const analysisSummary = new AnalysisSummary(analyzedDataSet);
 
-        //TODO send event (BUY, SELL)
+        AnalysisEventService.sendEvent(analysisSummary);
+
+        return analysisSummary;
     }
 }
 
