@@ -8,7 +8,7 @@ const { Dynamoose } = AwsConfig;
 interface AnalysedDataDtoModel extends Document, AnalyzedDataDto {}
 
 export const AnalyzedDataRepository = Dynamoose.model<AnalysedDataDtoModel>(
-    `${CONFIG.DYNAMODB.DATABASE_NAME}.${CONFIG.DYNAMODB.ANALYZED_DATA.TABLE_NAME}`,
+    `${CONFIG.AWS.DYNAMODB.DATABASE_NAME}.${CONFIG.AWS.DYNAMODB.ANALYZED_DATA.TABLE_NAME}`,
     new Dynamoose.Schema(
         {
             interval: {
