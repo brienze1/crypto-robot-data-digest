@@ -21,7 +21,7 @@ class AwsConfig {
 
     private static getDynamoose(): typeof Dynamoose {
         if (CONFIG.PROFILE === 'localstack' || CONFIG.PROFILE === 'development' || CONFIG.PROFILE === 'test') {
-            Dynamoose.aws.ddb.local(`${CONFIG.DYNAMODB.URL}:${CONFIG.DYNAMODB.PORT}`);
+            Dynamoose.aws.ddb.local(`${CONFIG.AWS.URL}:${CONFIG.AWS.PORT}`);
         }
 
         return Dynamoose;
@@ -31,7 +31,7 @@ class AwsConfig {
         if (CONFIG.PROFILE === 'localstack' || CONFIG.PROFILE === 'development' || CONFIG.PROFILE === 'test') {
             AWS.config.update({
                 sns: {
-                    endpoint: `${CONFIG.DYNAMODB.URL}:${CONFIG.DYNAMODB.PORT}`,
+                    endpoint: `${CONFIG.AWS.URL}:${CONFIG.AWS.PORT}`,
                 },
             });
         }
