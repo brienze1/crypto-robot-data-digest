@@ -6,6 +6,7 @@ COPY . .
 # Install zip in container
 RUN apk update
 RUN apk add zip
+RUN apk add bash
 
 # Update NPM
 RUN npm config set unsafe-perm true

@@ -7,18 +7,18 @@
     2. [Output](#output)
     3. [Rules](#rules)
     4. [Built With](#built-with)
-       1. [Dependencies](#dependencies)
-       2. [Compiler Dependencies](#compiler-dependencies)
-       3. [Test Dependencies](#test-dependencies)
+        1. [Dependencies](#dependencies)
+        2. [Compiler Dependencies](#compiler-dependencies)
+        3. [Test Dependencies](#test-dependencies)
     5. [Roadmap](#roadmap)
 2. [Getting Started](#getting-started)
     1. [Prerequisites](#prerequisites)
     2. [Installation](#installation)
     3. [Requirements](#requirements)
-       1. [Deploying Local Infrastructure](#deploying-local-infrastructure)
+        1. [Deploying Local Infrastructure](#deploying-local-infrastructure)
     4. [Usage](#usage)
-       1. [Manual Input](#manual-input)
-       2. [Docker Input](#docker-input)
+        1. [Manual Input](#manual-input)
+        2. [Docker Input](#docker-input)
     5. [Testing](#testing)
 
 ## About the Project
@@ -27,34 +27,37 @@ The objective of this project is to implement an application that can digest ana
 
 ### Input
 
-The input should be received as an SNS message sent through an SQS subscription. This message will trigger the lambda handler to perform the service. 
-Data should come in intervals of analysis, each interval should have two types of analysis (initially, this could improve in the future) 
-simple moving average analysis (SMA) and exponential moving average analysis (EMA), each of them will have 6 periods of data analysed. 
+The input should be received as an SNS message sent through an SQS subscription. This message will trigger the lambda handler to perform the service.
+Data should come in intervals of analysis, each interval should have two types of analysis (initially, this could improve in the future)
+simple moving average analysis (SMA) and exponential moving average analysis (EMA), each of them will have 6 periods of data analysed.
 The analysis will have an indicator for the period evaluated this can range from a STRONG_SELL up to a STRONG_BUY indication.
 
 The intervals will be received as:
-- ONE_MINUTE
-- FIVE_MINUTES
-- FIFTEEN_MINUTES
-- THIRTY_MINUTES
-- ONE_HOUR
-- SIX_HOURS
-- ONE_DAY
+
+-   ONE_MINUTE
+-   FIVE_MINUTES
+-   FIFTEEN_MINUTES
+-   THIRTY_MINUTES
+-   ONE_HOUR
+-   SIX_HOURS
+-   ONE_DAY
 
 Each interval will analyse the data according to these periods:
-- 5
-- 10
-- 20
-- 50
-- 100
-- 200
+
+-   5
+-   10
+-   20
+-   50
+-   100
+-   200
 
 Analysis indicators:
-- STRONG_BUY
-- BUY
-- NEUTRAL
-- SELL
-- STRONG_SELL
+
+-   STRONG_BUY
+-   BUY
+-   NEUTRAL
+-   SELL
+-   STRONG_SELL
 
 Example of how the data should look like:
 
@@ -132,7 +135,7 @@ Example of how the data should look like:
 
 ### Output
 
-Since this is an async application there is no output to be received, but events are generated accordingly to the data received, 
+Since this is an async application there is no output to be received, but events are generated accordingly to the data received,
 the events should have an indication to BUY or SELL.
 
 Example of how the line should look like:
@@ -143,7 +146,7 @@ Example of how the line should look like:
     "timestamp": "20-07-2022 02:18:10",
     "analysed_data": [
         {
-          "interval": "0NE_MINUTE",  
+          "interval": "0NE_MINUTE",
           "timestamp": "20-07-2022 02:18:10",
           "summary": "BUY",
           "analysis": [
@@ -163,7 +166,7 @@ Example of how the line should look like:
                     "sell": 3
                 }
             }
-          ]   
+          ]
         },
         {
           "interval": "FIVE_MINUTES",
@@ -186,7 +189,7 @@ Example of how the line should look like:
                     "sell": 3
                 }
             }
-          ]   
+          ]
         },
         {
           "interval": "FIFTEEN_MINUTES",
@@ -209,7 +212,7 @@ Example of how the line should look like:
                     "sell": 3
                 }
             }
-          ]   
+          ]
         },
         {
           "interval": "THIRTY_MINUTES",
@@ -232,7 +235,7 @@ Example of how the line should look like:
                     "sell": 3
                 }
             }
-          ]   
+          ]
         },
         {
           "interval": "ONE_HOUR",
@@ -255,7 +258,7 @@ Example of how the line should look like:
                     "sell": 3
                 }
             }
-          ]   
+          ]
         },
         {
           "interval": "SIX_HOURS",
@@ -278,7 +281,7 @@ Example of how the line should look like:
                     "sell": 3
                 }
             }
-          ]   
+          ]
         },
         {
           "interval": "ONE_DAY",
@@ -301,7 +304,7 @@ Example of how the line should look like:
                     "sell": 3
                 }
             }
-          ]   
+          ]
         }
     ]
 }
@@ -313,44 +316,55 @@ The most important field is the "summary" field, but the detailed indicators cou
 
 Here are some rules that need to be implemented in this application.
 
-* Data needs to be updated on the database
-* Data received should be checked to see if it's newer than the one saved
-* The app should gather all the data saved and generate an indication
-* If there is no data saved on the database, the summary should be generated using only the data received
-* The data should be sent via SNS topic event
+Implemented:
+
+-   Data needs to be updated on the database once it is received
+-   The app should gather all the data saved and generate an indication
+-   The data should be sent via SNS topic event
+
+Not implemented:
+
+-   Data received should be checked to see if it's newer than the one saved
+-   If there is no data saved on the database, the summary should be generated using only the data received
 
 ### Built With
 
-This application is build with Node.js Typescript, code is build using a Dockerfile every deployment into the main branch 
+This application is build with Node.js Typescript, code is build using a Dockerfile every deployment into the main branch
 in GitHub using GitHub actions.
-Local environment is created using localstack for testing purposes using 
+Local environment is created using localstack for testing purposes using
 [crypto-robot-localstack](https://github.com/brienze1/crypto-robot-localstack).
 
 #### Dependencies
 
-* [aws-lambda](https://github.com/FasterXML/jackson-databind)
-* [winston](https://github.com/FasterXML/jackson-databind)
-* [uuid](https://github.com/FasterXML/jackson-databind)
+-   [aws-lambda](https://www.npmjs.com/package/aws-lambda): Used in Lambda Handler integration
+-   [aws-sdk](https://www.npmjs.com/package/aws-sdk): Used in SNS integration (Needs to be replaced for SNS specific dependency)
+-   [dynamoose](https://www.npmjs.com/package/dynamoose): Used as ORM for DynamoDB
+-   [winston](https://www.npmjs.com/package/winston): Used for logging purposes
+-   [uuid](https://www.npmjs.com/package/uuid): Used to generate uuids
 
 #### Compiler Dependencies
 
-* [typescript](https://github.com/junit-team/junit4): Used to run unit tests
-* [eslint](https://github.com/junit-team/junit4): Used to run unit tests
-* [babel](https://github.com/junit-team/junit4): Used to run unit tests
+-   [typescript](https://www.npmjs.com/package/typescript): Used run/compile typescript code
+-   [eslint](https://www.npmjs.com/package/eslint): Used to enforce coding practices
+-   [babel](https://babeljs.io/): Used to transpile code into js on build
+-   [dotenv](https://www.npmjs.com/package/dotenv): Used to map .env variables
 
 #### Test Dependencies
 
-* [jest](https://github.com/junit-team/junit4): Used to run unit tests
-* [ts-jest](https://github.com/junit-team/junit4): Used to run unit tests
+-   [jest](https://www.npmjs.com/package/jest): Used to run unit tests
+-   [@cucumber/cucumber](https://www.npmjs.com/package/@cucumber/cucumber): Used to run integration tests
+-   [chai](https://www.npmjs.com/package/chai): Used to perform test assertions with cucumber
+-   [sinon](https://www.npmjs.com/package/sinon): Used to create mocks/stubs/spy's
+-   [aws-sdk-mock](https://www.npmjs.com/package/aws-sdk-mock): Used to create mocks for AWS integrations
 
 ### Roadmap
 
-* [ ] Implement Behaviour tests (BDD) 
-* [ ] Implement Unit tests 
-* [ ] Implement application logic 
-* [x] Create Dockerfile 
-* [x] Create Docker compose for local infrastructure 
-* [ ] Document everything in Readme
+-   [X] Implement Behaviour tests (BDD)
+-   [X] Implement Unit tests
+-   [X] Implement application logic
+-   [X] Create Dockerfile
+-   [X] Create Docker compose for local infrastructure
+-   [X] Document everything in Readme
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -358,32 +372,32 @@ Local environment is created using localstack for testing purposes using
 
 ### Prerequisites
 
-- Install Node and npm
-  - Windows/MacOS/Linux 
-    - [Manual](https://nodejs.org/)
-  - macOS
-    - [Homebrew](https://docs.brew.sh/Installation)
-      ```bash
-      brew install node
-      ```
-  - Linux
-    - Via terminal
-      ```bash
-      sudo apt install nodejs
-      sudo apt install npm
-      ```
+-   Install Node and npm
 
-- Install Docker (Optional)
-    - [Windows/macOS/Linux/WSL](https://www.docker.com/get-started/)
+    -   Windows/MacOS/Linux
+        -   [Manual](https://nodejs.org/)
+    -   macOS
+        -   [Homebrew](https://docs.brew.sh/Installation)
+            ```bash
+            brew install node
+            ```
+    -   Linux
+        -   Via terminal
+            ```bash
+            sudo apt install nodejs
+            sudo apt install npm
+            ```
 
+-   Install Docker
+    -   [Windows/macOS/Linux/WSL](https://www.docker.com/get-started/)
 
 ### Installation
 
-- Run the following to install dependencies and compile the project:
-    - Windows/MacOS/Linux/WSL
-      ```bash
-      npm install && npm run build
-      ```
+-   Run the following to install dependencies and compile the project:
+    -   Windows/MacOS/Linux/WSL
+        ```bash
+        npm install && npm run build
+        ```
 
 ### Requirements
 
@@ -391,55 +405,55 @@ To run the application locally, first a local infrastructure needs to be deploye
 
 #### Deploying Local Infrastructure
 
-This requires [docker](#prerequisites) to be installed. Localstack will deploy aws local integration and create the 
+This requires [docker](#prerequisites) to be installed. Localstack will deploy aws local integration and create the
 topic used by this application to send the events.
 
 Obs: Make sure Docker is running before.
 
-- Start the required infrastructure via localstack using docker compose command:
-    - Windows/macOS/Linux/WSL
-      ```bash
-      docker-compose up
-      ```
+-   Start the required infrastructure via localstack using docker compose command:
 
-- To stop localstack:
-    - Windows/macOS/Linux/WSL
-      ```bash
-      docker-compose down
-      ```
+    -   Windows/macOS/Linux/WSL
+        ```bash
+        docker-compose up
+        ```
+
+-   To stop localstack:
+    -   Windows/macOS/Linux/WSL
+        ```bash
+        docker-compose down
+        ```
 
 ### Usage
 
 #### Manual Input
-      
-- Start the compiled application:
-    - Windows/macOS/Linux/WSL
-      ```bash
-      npm run dev
-      ```
-      
-- To stop the application just press Ctrl+C 
+
+-   Start the compiled application:
+    -   Windows/macOS/Linux/WSL
+        ```bash
+        npm run dev
+        ```
+-   To stop the application just press Ctrl+C
 
 #### Docker Input
-- In case you want to use a Docker container to run the application first you need to build the Docker image from Dockerfile:
-    - Windows/macOS/Linux/WSL
-      ```bash
-      docker build -t crypto-robot-data-digest .
-      ```
-      
-[//]: # (TODO fix this)
-- And then run the new created image:
-  - Windows/macOS/Linux/WSL
-    ```bash
-    docker run --rm -it crypto-robot-data-analysis-gen:latest
-    ```
-    
-### Testing 
 
-- To run the tests just type the command bellow in terminal:
-    - Windows/macOS/Linux/WSL
-      ```bash
-      npm run test
-      ```
+-   In case you want to use a Docker container to run the application first you need to build the Docker image from Dockerfile:
+    -   Windows/macOS/Linux/WSL
+        ```bash
+        docker build -t crypto-robot-data-digest .
+        ```
+
+-   And then run the new created image:
+    -   Windows/macOS/Linux/WSL
+        ```bash
+        docker run --network="host" -d -it crypto-robot-data-digest bash -c "npm install && npm run dev:docker"
+        ```
+
+### Testing
+
+-   To run the tests just type the command bellow in terminal:
+    -   Windows/macOS/Linux/WSL
+        ```bash
+        npm run test
+        ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
