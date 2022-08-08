@@ -1,5 +1,7 @@
 FROM node:18-alpine as lambda
 
+MAINTAINER Luis Brienze <lfbrienze@gmail.com>
+
 WORKDIR /usr/src
 COPY . .
 
