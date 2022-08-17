@@ -1,6 +1,6 @@
 <div id="top"></div>
 
-# Crypto Data Analysis Generator
+# Crypto Data Digest
 
 1. [About the Project](#about-the-project)
     1. [Input](#input)
