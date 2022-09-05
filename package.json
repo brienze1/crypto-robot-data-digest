@@ -18,7 +18,7 @@
     "test": "npm run test:unit && npm run test:integrated",
     "coverage": "npm run test:unit --coverage && npm run test:integrated --coverage",
     "test:unit": "jest --passWithNoTests",
-    "test:integrated": ".\\node_modules\\.bin\\cucumber-js -p default --require-module dotenv/config dotenv_config_path=resources/.env.integration-test"
+    "test:integrated": "./node_modules/.bin/cucumber-js -p default --require-module dotenv/config dotenv_config_path=resources/.env.integration-test"
   },
   "repository": {
     "type": "git",
