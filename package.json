@@ -19,7 +19,7 @@
     "test:unit": "jest --passWithNoTests",
     "test:integrated": "./node_modules/.bin/cucumber-js -p default --require-module dotenv/config dotenv_config_path=resources/.env.integration-test",
     "check": "npm run dependency-check && npm run retire",
-    "dependency-check": "depcheck.cmd --ignores @babel/node,@cucumber/pretty-formatter,@types/express,@types/jest,depcheck,dotenv,ts-node-dev,tsconfig-paths",
+    "dependency-check": "depcheck --ignores @babel/node,@cucumber/pretty-formatter,@types/express,@types/jest,depcheck,dotenv,ts-node-dev,tsconfig-paths",
     "retire": " retire --package"
   },
   "repository": {
