@@ -16,17 +16,16 @@ jobs:
 #  dependency-check:
 #    uses: ./.github/workflows/dependency_check.yml
 
-#  coverage:
-#    needs:
-#      - test
-#      - lint
+  coverage:
+    needs:
+      - test
+      - lint
 #      - dependency-check
-#    uses: ./.github/workflows/coverage.yml
+    uses: ./.github/workflows/coverage.yml
 
   deploy-docker:
     needs:
-      - lint
-      - test
+      - coverage
     uses: ./.github/workflows/deploy_docker.yml
     secrets:
       username: ${{ secrets.DOCKER_HUB_USERNAME }}
