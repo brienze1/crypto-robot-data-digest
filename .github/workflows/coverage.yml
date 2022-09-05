@@ -19,7 +19,7 @@ jobs:
         run: npm ci
 
       - name: Generate coverage report
-        run: npm run coverage
+        run: npm run test
 
 #      - name: Convert coverage.out to coverage.lcov
 #        uses: jandelgado/gcov2lcov-action@v1
