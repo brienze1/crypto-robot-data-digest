@@ -16,8 +16,9 @@
     "dev:docker": "ts-node -r tsconfig-paths/register -r dotenv/config src/test/local/DockerTest.test.ts dotenv_config_path=resources/.env.docker dotenv_config_debug=true",
     "pretest": "npm run lint",
     "test": "npm run test:unit && npm run test:integrated",
-    "test:unit": "jest --passWithNoTests --coverage",
-    "test:integrated": "./node_modules/.bin/cucumber-js -p default --require-module dotenv/config dotenv_config_path=resources/.env.integration-test --coverage"
+    "test:coverage": "jest --passWithNoTests --coverage",
+    "test:unit": "jest --passWithNoTests",
+    "test:integrated": "./node_modules/.bin/cucumber-js -p default --require-module dotenv/config dotenv_config_path=resources/.env.integration-test"
   },
   "repository": {
     "type": "git",
