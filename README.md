@@ -6,6 +6,7 @@
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/brienze1/crypto-robot-data-digest)
 ![Build](https://img.shields.io/github/workflow/status/brienze1/crypto-robot-data-digest/Build?label=Build)
 [![Coverage Status](https://coveralls.io/repos/github/brienze1/crypto-robot-data-digest/badge.svg?branch=main)](https://coveralls.io/github/brienze1/crypto-robot-data-digest?branch=main)
+![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/brienze1/crypto-robot-data-digest/dev/typescript?label=Typescript)
 
 1. [About the Project](#about-the-project)
     1. [Input](#input)
