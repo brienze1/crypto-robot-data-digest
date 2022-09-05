@@ -2,7 +2,6 @@
   "name": "typescript-template",
   "version": "1.0.0",
   "description": "",
-  "main": "src/main/delivery/handler/Handler.ts",
   "scripts": {
     "clean": "rimraf dist && rimraf coverage",
     "prebuild:production": "npm run clean && npm run lint && npm run test",
@@ -20,7 +19,7 @@
     "test:unit": "jest --passWithNoTests",
     "test:integrated": "./node_modules/.bin/cucumber-js -p default --require-module dotenv/config dotenv_config_path=resources/.env.integration-test",
     "check": "npm run dependency-check && npm run retire",
-    "dependency-check": "dependency-check package.json --verbose --no-dev",
+    "dependency-check": "depcheck.cmd --ignores @babel/node,@cucumber/pretty-formatter,@types/express,@types/jest,depcheck,dotenv,ts-node-dev,tsconfig-paths",
     "retire": " retire --package"
   },
   "repository": {
@@ -57,7 +56,7 @@
     "cross-env": "^7.0.3",
     "cucumber": "^6.0.7",
     "cucumber-tsflow": "^4.0.0-preview.7",
-    "dependency-check": "^4.1.0",
+    "depcheck": "^1.4.3",
     "dotenv": "^16.0.1",
     "eslint": "^8.19.0",
     "eslint-config-airbnb-base": "^15.0.0",
