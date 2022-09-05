@@ -2,6 +2,11 @@
 
 # Crypto Data Digest
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/brienze1/crypto-robot-data-digest/blob/main/LICENSE)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/brienze1/crypto-robot-data-digest)
+![Build](https://img.shields.io/github/workflow/status/brienze1/crypto-robot-data-digest/Build?label=Build)
+[![Coverage Status](https://coveralls.io/repos/github/brienze1/crypto-robot-data-digest/badge.svg?branch=main)](https://coveralls.io/github/brienze1/crypto-robot-data-digest?branch=main)
+
 1. [About the Project](#about-the-project)
     1. [Input](#input)
     2. [Output](#output)
