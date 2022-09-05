@@ -21,13 +21,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Go
-        uses: actions/setup-go@v3
+      - name: Use Node.js 18
+        uses: actions/setup-node@v3
         with:
-          go-version: 1.19
+          node-version: 18
 
-      - name: Write Go list
-        run: go list -json -m all > go.list
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Nancy
-        uses: sonatype-nexus-community/nancy-github-action@main
+      - name: Run check
+        run: npm run check
