@@ -1,10 +1,13 @@
 name: Build
 
 on:
-  push:
+  workflow_run:
+    workflows:
+      - "Auto Merge"
+    types:
+      - completed
     branches:
       - main
-      - develop
 
 jobs:
   lint:
@@ -24,10 +27,10 @@ jobs:
     uses: ./.github/workflows/coverage.yml
 
   deploy-docker:
-    needs:
-      - coverage
+    needs: coverage
     uses: ./.github/workflows/deploy_docker.yml
     secrets:
       username: ${{ secrets.DOCKER_HUB_USERNAME }}
       app_name: ${{ secrets.DOCKER_HUB_APP_NAME }}
       token: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
