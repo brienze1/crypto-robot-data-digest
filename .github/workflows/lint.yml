@@ -2,6 +2,12 @@ name: Lint
 
 on:
   workflow_call:
+    inputs:
+      branch:
+        description: 'The branch that the workflow should run with'
+        default: 'main'
+        required: false
+        type: string
 
 jobs:
   lint:
@@ -10,6 +16,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch }}
 
       - name: Use Node.js 18
         uses: actions/setup-node@v3
