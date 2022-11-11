@@ -12,7 +12,7 @@ aws sqs create-queue \
 --attributes '{
     "RedrivePolicy": "{\"deadLetterTargetArn\":\"arn:aws:sqs:sa-east-1:000000000000:cryptoAnalysisQueueDLQ\",\"maxReceiveCount\":\"3\"}",
     "MessageRetentionPeriod": "259200",
-    "VisibilityTimeout": "90"
+    "VisibilityTimeout": "30"
 }' \
 --endpoint-url http://localstack:4566
 
