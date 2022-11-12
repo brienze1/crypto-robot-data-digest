@@ -13,3 +13,4 @@ aws sns create-topic --name cryptoAnalysisTopic --endpoint-url http://localhost:
 
 echo "########### Listing SNS ###########"
 aws sns list-topics --endpoint-url http://localhost:4566
+

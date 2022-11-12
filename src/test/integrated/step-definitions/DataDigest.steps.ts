@@ -1,7 +1,7 @@
 import { after, before, binding, given, then, when } from 'cucumber-tsflow';
 import { defineParameterType, setDefaultTimeout } from '@cucumber/cucumber';
 import * as fs from 'fs';
-import { Context, SNSMessage, SQSEvent } from 'aws-lambda';
+import { Context, SQSEvent } from 'aws-lambda';
 import { AnalyzedDataDto } from '@/integration/dto/AnalyzedDataDto';
 import * as Handler from '@/delivery/handler/Handler';
 import { assert } from 'chai';
@@ -75,9 +75,9 @@ export class DataDigestSteps {
 
     @when('The handler function gets called')
     async theHandlerFunctionGetsCalled() {
-        const snsMessage = DataDigestSteps.generateSNSMessage(eventMessage);
+        // const snsMessage = DataDigestSteps.generateSNSMessage(eventMessage);
 
-        const sqsEvent = DataDigestSteps.generateSQSEvent(snsMessage);
+        const sqsEvent = DataDigestSteps.generateSQSEvent(eventMessage);
 
         const context = DataDigestSteps.generateContext();
 
@@ -138,23 +138,6 @@ export class DataDigestSteps {
     // ------------ functions ------------
     private static getJsonFile(jsonFile: String): any {
         return JSON.parse(fs.readFileSync(`${__dirname}/../resources/${jsonFile}`, 'utf-8'));
-    }
-
-    private static generateSNSMessage(message: any): SNSMessage {
-        return {
-            MessageAttributes: {},
-            Subject: '',
-            Type: 'Notification',
-            MessageId: '41cf51ea-1a79-4864-9132-b15c8dd040cd',
-            TopicArn: 'arn:aws:sns:sa-east-1:000000000000:cryptoAnalysisTopic',
-            Message: typeof message === 'string' ? message : JSON.stringify(message),
-            Timestamp: '2022-07-21T14:58:58.971',
-            SignatureVersion: '1',
-            Signature: 'EXAMPLEpH+..',
-            SigningCertUrl: 'https://sns.us-east-1.amazonaws.com/SimpleNotificationService-0000000000000000000000.pem',
-            UnsubscribeUrl:
-                'http://localhost:4566/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:sa-east-1:000000000000:cryptoAnalysisTopic:d141d0ea-1ae4-4a94-88cf-e9394155c697',
-        };
     }
 
     private static generateSQSEvent(message: any): SQSEvent {
