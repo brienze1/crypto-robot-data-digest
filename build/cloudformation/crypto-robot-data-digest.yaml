@@ -1,0 +1,203 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Crypto Robot Data Digest
+
+Parameters:
+  # DB config
+  ReadCapacityUnits:
+    Type: Number
+    Default: 5
+  WriteCapacityUnits:
+    Type: Number
+    Default: 5
+
+  # Tags
+  System:
+    Type: String
+    Default: 'crypto-robot'
+  Parent:
+    Type: String
+    Default: 'crypto-robot-data-digest'
+
+Resources:
+  CryptoDataDigestQueueDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: 'cryptoDataDigestQueueDLQ'
+    Tags:
+      - Key: type
+        Value: sqs-dlq
+      - Key: system
+        Value: !Ref System
+      - Key: parent
+        Value: !Ref Parent
+
+  CryptoDataDigestQueue:
+    Type: AWS::SQS::Queue
+#    DependsOn: CryptoDataDigestQueueDLQ
+    Properties:
+      QueueName: 'cryptoDataDigestQueue'
+      VisibilityTimeout: 30
+      RedrivePolicy:
+        deadLetterTargetArn: !Sub ${CryptoDataDigestQueueDLQ.Arn}
+        maxReceiveCount: 3
+    Tags:
+      - Key: type
+        Value: sqs
+      - Key: system
+        Value: !Ref System
+      - Key: parent
+        Value: !Ref Parent
+
+  CryptoAnalysisTopicToCryptoDataDigestQueue:
+    Type: AWS::SNS::Subscription
+#    DependsOn: CryptoDataDigestQueue
+    Properties:
+      TopicArn: 'arn:aws:sns:sa-east-1:000000000000:cryptoAnalysisTopic'
+      Endpoint: !Sub ${CryptoDataDigestQueue.Arn}
+      Protocol: sqs
+      RawMessageDelivery: true
+    Tags:
+      - Key: type
+        Value: sns-subscription
+      - Key: system
+        Value: !Ref System
+      - Key: parent
+        Value: !Ref Parent
+
+  CryptoAnalysisSummaryTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: 'cryptoAnalysisSummaryTopic'
+    Tags:
+      - Key: type
+        Value: sns
+      - Key: system
+        Value: !Ref System
+      - Key: parent
+        Value: !Ref Parent
+
+  CryptoRobotAnalyzedDataDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: 'crypto_robot.analyzed_data'
+      AttributeDefinitions:
+        - AttributeName: 'interval'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'interval'
+          KeyType: 'HASH'
+      ProvisionedThroughput:
+        ReadCapacityUnits: !Ref ReadCapacityUnits
+        WriteCapacityUnits: !Ref WriteCapacityUnits
+    Tags:
+      - Key: type
+        Value: table
+      - Key: system
+        Value: !Ref System
+      - Key: parent
+        Value: !Ref Parent
+
+  CryptoDataDigestLambdaRole:
+    Type: AWS::IAM::Role
+#    DependsOn:
+#      - CryptoDataDigestQueue
+#      - CryptoAnalysisSummaryTopic
+#      - CryptoRobotAnalyzedDataDynamoDBTable
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: '/'
+      Policies:
+        - PolicyName: logs
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+        - PolicyName: sqs
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sqs:ReceiveMessage
+                Resource: !Sub ${CryptoDataDigestQueue.Arn}
+        - PolicyName: sns
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sns:Publish
+                Resource: !Sub ${CryptoAnalysisSummaryTopic.Arn}
+        - PolicyName: dynamodb
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:BatchGet*
+                  - dynamodb:DescribeTable
+                  - dynamodb:Get*
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:Delete*
+                  - dynamodb:Update*
+                  - dynamodb:PutItem
+                Resource: !Sub ${CryptoRobotAnalyzedDataDynamoDBTable.Arn}
+    Tags:
+      - Key: type
+        Value: role
+      - Key: system
+        Value: !Ref System
+      - Key: parent
+        Value: !Ref Parent
+
+  CryptoDataDigestLambda:
+    Type: AWS::Lambda::Function
+#    DependsOn: CryptoDataDigestLambdaRole
+    Properties:
+      Runtime: nodejs16.x
+      Role: !Sub ${CryptoDataDigestLambdaRole.Arn}
+      Handler: ./dist/main/delivery/handler/Handler.execute
+      FunctionName: 'dataDigestLambda'
+      Code:
+        S3Bucket: lambda-functions
+        S3Key: crypto-robot-data-digest.zip
+      MemorySize: 128
+      Timeout: 60
+      Description: 'SQS Lambda handler for analysis data digestion.'
+    Tags:
+      - Key: type
+        Value: lambda
+      - Key: system
+        Value: !Ref System
+      - Key: parent
+        Value: !Ref Parent
+  #      Environment:
+  #        Variables:
+  #          TASK_QUEUE_URL: !Ref TaskQueue
+
+  CryptoDataDigestLambdaEventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+#    DependsOn:
+#      - CryptoDataDigestQueue
+#      - CryptoDataDigestLambda
+    Properties:
+      BatchSize: 1
+      Enabled: true
+      EventSourceArn: !Sub ${CryptoDataDigestQueue.Arn}
+      FunctionName: !Sub ${CryptoDataDigestLambda.Arn}
+    Tags:
+      - Key: type
+        Value: event-source-mapping
+      - Key: system
+        Value: !Ref System
+      - Key: parent
+        Value: !Ref Parent

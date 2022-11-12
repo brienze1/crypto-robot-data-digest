@@ -27,18 +27,7 @@ describe('Handler test', () => {
                         SentTimestamp: '1658342180397',
                     },
                     awsRegion: 'sa-east-1',
-                    body: `
-                {
-                    "Type": "Notification", 
-                    "MessageId": "41cf51ea-1a79-4864-9132-b15c8dd040cd", 
-                    "TopicArn": "arn:aws:sns:sa-east-1:000000000000:cryptoAnalysisTopic", 
-                    "Message": "{\\"interval\\":\\"ONE_DAY\\",\\"timestamp\\":\\"2022-07-22T11:47:33\\",\\"analysisData\\":{\\"simpleMovingAverages\\":[{\\"period\\":\\"FIVE\\",\\"value\\":22479.07200,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"TEN\\",\\"value\\":21457.34600,\\"indicator\\":\\"BUY\\"},{\\"period\\":\\"TWENTY\\",\\"value\\":20987.83950,\\"indicator\\":\\"BUY\\"},{\\"period\\":\\"FIFTY\\",\\"value\\":22815.01820,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"HUNDRED\\",\\"value\\":28716.17480,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"TWO_HUNDRED\\",\\"value\\":35075.66910,\\"indicator\\":\\"NEUTRAL\\"}],\\"exponentialMovingAverages\\":[{\\"period\\":\\"FIVE\\",\\"value\\":22094.03041,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"TEN\\",\\"value\\":21009.22521,\\"indicator\\":\\"BUY\\"},{\\"period\\":\\"TWENTY\\",\\"value\\":20475.42766,\\"indicator\\":\\"BUY\\"},{\\"period\\":\\"FIFTY\\",\\"value\\":24912.26174,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"HUNDRED\\",\\"value\\":32123.80436,\\"indicator\\":\\"NEUTRAL\\"},{\\"period\\":\\"TWO_HUNDRED\\",\\"value\\":38738.82237,\\"indicator\\":\\"NEUTRAL\\"}]}}", 
-                    "Timestamp": "2022-07-21T14:58:58.971", 
-                    "SignatureVersion": "1", 
-                    "Signature": "EXAMPLEpH+..", 
-                    "SigningCertURL": "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-0000000000000000000000.pem", 
-                    "UnsubscribeURL": "http://localhost:4566/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:sa-east-1:000000000000:cryptoAnalysisTopic:d141d0ea-1ae4-4a94-88cf-e9394155c697"
-                }`,
+                    body: '{"interval":"ONE_DAY","timestamp":"2022-07-22T11:47:33","analysisData":{"simpleMovingAverages":[{"period":"FIVE","value":22479.07200,"indicator":"NEUTRAL"},{"period":"TEN","value":21457.34600,"indicator":"BUY"},{"period":"TWENTY","value":20987.83950,"indicator":"BUY"},{"period":"FIFTY","value":22815.01820,"indicator":"NEUTRAL"},{"period":"HUNDRED","value":28716.17480,"indicator":"NEUTRAL"},{"period":"TWO_HUNDRED","value":35075.66910,"indicator":"NEUTRAL"}],"exponentialMovingAverages":[{"period":"FIVE","value":22094.03041,"indicator":"NEUTRAL"},{"period":"TEN","value":21009.22521,"indicator":"BUY"},{"period":"TWENTY","value":20475.42766,"indicator":"BUY"},{"period":"FIFTY","value":24912.26174,"indicator":"NEUTRAL"},{"period":"HUNDRED","value":32123.80436,"indicator":"NEUTRAL"},{"period":"TWO_HUNDRED","value":38738.82237,"indicator":"NEUTRAL"}]}}',
                     eventSource: 'aws:sqs',
                     eventSourceARN: 'arn:aws:sqs:sa-east-1:000000000000:cryptoAnalysisQueue',
                     md5OfBody: '9ee374a1d9253707d2a679f092519091',
@@ -68,7 +57,7 @@ describe('Handler test', () => {
             succeed(): void {},
         };
 
-        const analysisIndicatorDto = JSON.parse(JSON.parse(event?.Records[0]?.body)?.Message || '{}');
+        const analysisIndicatorDto = JSON.parse(event?.Records[0]?.body) || '{}';
 
         analysisIndicator = new AnalysisIndicator(analysisIndicatorDto);
     });
